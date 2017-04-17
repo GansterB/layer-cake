@@ -1,0 +1,58 @@
+body {
+    background: #E2FFD3;
+}
+
+h2 {
+    text-align: center;
+    padding: 20px;
+}
+
+#container {
+    height: 60%;
+    width: 60%;
+    margin: 30px auto;
+    padding: 40px;
+    background: whitesmoke;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+input[type=text] {
+    border-style: none;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    outline: none;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.visual {
+    border-bottom: 1px solid lightgray;
+}
+
+.input {
+    padding: 20px 0;
+}
+
+#make {
+    border-style: none;
+    outline: none;
+    padding: 20px;
+    display: block;
+    width: 200px;
+    margin: 10px auto;
+    font-weight: bold;
+    border-radius: 5px;
+    background: #71C257;
+    color: white;
+    box-shadow: 0px 5px #4e9636;
+    transition: 0.1s;
+}
+
+#make:active {
+    transform: translateY(3px);
+    box-shadow: 0px 2px #4e9636;
+}

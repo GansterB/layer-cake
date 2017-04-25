@@ -14,7 +14,8 @@ class Creator extends Component {
     this.state = {
       results: [],
       video: '',
-      audio: ''
+      audio: [],
+      audioElem: ['0']
     }
 
     this.clearResults = this.clearResults.bind(this)
@@ -33,12 +34,46 @@ class Creator extends Component {
     this.setState({ results: this.state.results.concat(items.map(itemToResult)) })
   }
 
+  getID(url) {
+    var key = 'watch?v=';
+
+    // currently no lists for audio
+    var start = url.indexOf(key) + key.length;
+
+    if(start - key.length === -1) {
+      return "";
+    }
+
+    var end = url.indexOf('&');
+    end = end === -1 ? url.length : end;
+
+    var id = url.substring(start, end);
+
+    return id;
+  }
+
   handleVideoChange(event) {
-    this.setState({video: event.target.value});
+    this.setState({video: this.getID(event.target.value)});
   }
 
   handleAudioChange(event) {
-    this.setState({audio: event.target.value});
+    this.state.audio[event.target.className] = this.getID(event.target.value);
+    if (this.state.audioElem.length - 1 == event.target.className && this.state.audio[event.target.className].length > 0) {
+      this.state.audioElem.push(parseInt(event.target.className) + 1);
+    }
+    console.log(this.state.audio);
+
+    this.forceUpdate();
+  }
+
+  makeCake() {
+    // get v dynamicly like eventually
+    var url = 'http://localhost:3000';
+
+    if (this.state.video.length > 0 && this.state.audio.length > 0) {
+      // final result after eventual checks for good data
+      window.location.replace(url + '/view/' + this.state.video + '/' + this.state.audio.join(','));
+    }
   }
 
   render() {
@@ -49,46 +84,17 @@ class Creator extends Component {
           <div className="visual input">
             Visual Element <input type="text" placeholder="YouTube video URL" value={this.video} onChange={this.handleVideoChange}/><br/>
           </div>
-          <div className="audio input">
-            Audio Element <input type="text" placeholder="YouTube video URL" value={this.audio} onChange={this.handleAudioChange}/><br/>
+          <div className="audio input" id="audioInput">
+            Audio Element
+            {this.state.audioElem.map(elemNum => {
+              return <div><input type="text" placeholder="YouTube video URL" className={elemNum} value={this.audio} onChange={this.handleAudioChange}/><br/></div>
+            })}
           </div>
           <button id="make" onClick={this.makeCake}>Make a Cake</button>
         </div>      
       </Container>
     )
   }
-
-  makeCake() {
-    // get v dynamicly like eventually
-    var url = 'http://localhost:3000/';
-
-    if (this.state.video.length > 0 && this.state.audio.length > 0) {
-      var vidID = this.getID(this.state.video);
-      var audID = this.getID(this.state.audio);
-
-      // final result after eventual checks for good data
-      window.location.replace('http://localhost:3000/view/' + vidID + '/' + audID);
-    }
-  }
-
-  getID(url) {
-    var key = 'watch?v=';
-
-    // currently no lists for audio
-    var start = url.indexOf(key) + key.length;
-    var end = url.indexOf('&');
-    end = end === -1 ? url.length : end;
-
-    var id = url.substring(start, end);
-
-    return id;
-  }
 }
-
-// Somewhat functional search code
-// <Search results={this.state.results} onSearchChange={(event, value) => {
-//     this.clearResults()
-//     find(value, 10, this.onPageLoad)
-//   }}/>
 
 export default Creator

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Container, Search } from 'semantic-ui-react'
-import { find } from './youtube'
+import { Container/*, Search */} from 'semantic-ui-react'
+// import { find } from './youtube'
 
 const itemToResult = (item) => ({
   title: item.snippet.title,
@@ -15,7 +15,7 @@ class Creator extends Component {
       results: [],
       video: '',
       audio: [],
-      audioElem: ['0']
+      audioElem: [0]
     }
 
     this.clearResults = this.clearResults.bind(this)
@@ -37,7 +37,6 @@ class Creator extends Component {
   getID(url) {
     var key = 'watch?v=';
 
-    // currently no lists for audio
     var start = url.indexOf(key) + key.length;
 
     if(start - key.length === -1) {
@@ -58,10 +57,13 @@ class Creator extends Component {
 
   handleAudioChange(event) {
     this.state.audio[event.target.className] = this.getID(event.target.value);
-    if (this.state.audioElem.length - 1 == event.target.className && this.state.audio[event.target.className].length > 0) {
-      this.state.audioElem.push(parseInt(event.target.className) + 1);
+    if (this.state.audioElem.length - 1 === parseInt(event.target.className, 10) && this.state.audio[event.target.className].length > 0) {
+      this.state.audioElem.push(parseInt(event.target.className, 10) + 1);
     }
-    console.log(this.state.audio);
+
+    if (this.state.audioElem.length - 2 === parseInt(event.target.className, 10) && event.target.value.length === 0) {
+      this.state.audioElem.pop();
+    }
 
     this.forceUpdate();
   }

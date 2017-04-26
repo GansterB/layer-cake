@@ -8,7 +8,9 @@ class Cake extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      playing: false
+      playing: false,
+      width: window.innerWidth,
+      height: window.innerHeight
     }
     this.play = this.play.bind(this)
     this.pause = this.pause.bind(this)
@@ -22,6 +24,22 @@ class Cake extends Component {
     this.setState({ playing: false })
   }
 
+  updateDimensions() {
+    this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    })
+  }
+
+  componentDidMount() {
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions.bind(this));
+  }
+
   render() {
     const { visual, audio } = this.props
     return (
@@ -29,8 +47,8 @@ class Cake extends Component {
         <ReactPlayer
           controls
           volume={0.00}
-          width={document.documentElement.clientWidth}
-          height={document.documentElement.clientHeight}
+          width={this.state.width}
+          height={this.state.height}
           url={youtubeUrl(visual)}
           playing={this.state.playing}
           onPlay={this.play}
